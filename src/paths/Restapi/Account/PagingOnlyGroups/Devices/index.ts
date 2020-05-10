@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   PagingOnlyGroupDevices,
   ListPagingGroupDevicesParameters,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class Devices {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,13 @@ class Devices {
    * Http get /restapi/v1.0/account/{accountId}/paging-only-groups/{pagingOnlyGroupId}/devices
    */
   async get(
-    queryParams?: ListPagingGroupDevicesParameters
+    queryParams?: ListPagingGroupDevicesParameters,
+    config?: RestRequestConfig
   ): Promise<PagingOnlyGroupDevices> {
     const r = await this.rc.get<PagingOnlyGroupDevices>(
       this.path(),
-      queryParams
+      queryParams,
+      config
     );
     return r.data;
   }

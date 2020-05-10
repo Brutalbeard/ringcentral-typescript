@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   GetMessageSyncResponse,
   SyncMessagesParameters,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class MessageSync {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,13 @@ class MessageSync {
    * Http get /restapi/v1.0/account/{accountId}/extension/{extensionId}/message-sync
    */
   async get(
-    queryParams?: SyncMessagesParameters
+    queryParams?: SyncMessagesParameters,
+    config?: RestRequestConfig
   ): Promise<GetMessageSyncResponse> {
     const r = await this.rc.get<GetMessageSyncResponse>(
       this.path(),
-      queryParams
+      queryParams,
+      config
     );
     return r.data;
   }

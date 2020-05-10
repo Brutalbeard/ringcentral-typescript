@@ -1,13 +1,14 @@
 import BulkAssign from './BulkAssign';
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   ListDevicesAutomaticLocationUpdates,
   ListDevicesAutomaticLocationUpdatesParameters,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class Devices {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -25,11 +26,13 @@ class Devices {
    * Http get /restapi/v1.0/account/{accountId}/emergency-address-auto-update/devices
    */
   async get(
-    queryParams?: ListDevicesAutomaticLocationUpdatesParameters
+    queryParams?: ListDevicesAutomaticLocationUpdatesParameters,
+    config?: RestRequestConfig
   ): Promise<ListDevicesAutomaticLocationUpdates> {
     const r = await this.rc.get<ListDevicesAutomaticLocationUpdates>(
       this.path(),
-      queryParams
+      queryParams,
+      config
     );
     return r.data;
   }

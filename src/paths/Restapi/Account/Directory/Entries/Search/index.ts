@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../../Rest';
 import {
   DirectoryResource,
   SearchDirectoryEntriesRequest,
 } from '../../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../../..';
+import RingCentral from '../../../../../..';
 
 class Search {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,14 @@ class Search {
    * Http post /restapi/v1.0/account/{accountId}/directory/entries/search
    */
   async post(
-    searchDirectoryEntriesRequest: SearchDirectoryEntriesRequest
+    searchDirectoryEntriesRequest: SearchDirectoryEntriesRequest,
+    config?: RestRequestConfig
   ): Promise<DirectoryResource> {
     const r = await this.rc.post<DirectoryResource>(
       this.path(),
-      searchDirectoryEntriesRequest
+      searchDirectoryEntriesRequest,
+      undefined,
+      config
     );
     return r.data;
   }

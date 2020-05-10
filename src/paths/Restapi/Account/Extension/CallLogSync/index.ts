@@ -1,9 +1,10 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {SyncUserCallLogParameters} from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class CallLogSync {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -20,8 +21,11 @@ class CallLogSync {
    * Rate Limit Group: Heavy
    * Http get /restapi/v1.0/account/{accountId}/extension/{extensionId}/call-log-sync
    */
-  async get(queryParams?: SyncUserCallLogParameters): Promise<CallLogSync> {
-    const r = await this.rc.get<CallLogSync>(this.path(), queryParams);
+  async get(
+    queryParams?: SyncUserCallLogParameters,
+    config?: RestRequestConfig
+  ): Promise<CallLogSync> {
+    const r = await this.rc.get<CallLogSync>(this.path(), queryParams, config);
     return r.data;
   }
 }

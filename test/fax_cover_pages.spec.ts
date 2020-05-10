@@ -1,11 +1,11 @@
 /* eslint-env jest */
-import RestClient from '../src/index';
+import RingCentral from '../src/index';
 
 jest.setTimeout(64000);
 
 describe('fax cover pages', () => {
   test('fax cover pages', async () => {
-    const rc = new RestClient({
+    const rc = new RingCentral({
       clientId: process.env.RINGCENTRAL_CLIENT_ID!,
       clientSecret: process.env.RINGCENTRAL_CLIENT_SECRET!,
       server: process.env.RINGCENTRAL_SERVER_URL!,
@@ -18,5 +18,6 @@ describe('fax cover pages', () => {
     const faxCoverPages = await rc.restapi().dictionary().faxCoverPage().get();
     expect(faxCoverPages.records?.length).toBeGreaterThan(0);
     expect(faxCoverPages.records?.[0].name).toBe('None');
+    await rc.revoke();
   });
 });

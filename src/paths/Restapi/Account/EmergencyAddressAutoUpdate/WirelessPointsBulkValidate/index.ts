@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   ValidateMultipleWirelessPointsResponse,
   ValidateMultipleWirelessPointsRequest,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class WirelessPointsBulkValidate {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,14 @@ class WirelessPointsBulkValidate {
    * Http post /restapi/v1.0/account/{accountId}/emergency-address-auto-update/wireless-points-bulk-validate
    */
   async post(
-    validateMultipleWirelessPointsRequest: ValidateMultipleWirelessPointsRequest
+    validateMultipleWirelessPointsRequest: ValidateMultipleWirelessPointsRequest,
+    config?: RestRequestConfig
   ): Promise<ValidateMultipleWirelessPointsResponse> {
     const r = await this.rc.post<ValidateMultipleWirelessPointsResponse>(
       this.path(),
-      validateMultipleWirelessPointsRequest
+      validateMultipleWirelessPointsRequest,
+      undefined,
+      config
     );
     return r.data;
   }

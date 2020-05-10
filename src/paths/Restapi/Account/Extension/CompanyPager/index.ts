@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   GetMessageInfoResponse,
   CreateInternalTextMessageRequest,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class CompanyPager {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,14 @@ class CompanyPager {
    * Http post /restapi/v1.0/account/{accountId}/extension/{extensionId}/company-pager
    */
   async post(
-    createInternalTextMessageRequest: CreateInternalTextMessageRequest
+    createInternalTextMessageRequest: CreateInternalTextMessageRequest,
+    config?: RestRequestConfig
   ): Promise<GetMessageInfoResponse> {
     const r = await this.rc.post<GetMessageInfoResponse>(
       this.path(),
-      createInternalTextMessageRequest
+      createInternalTextMessageRequest,
+      undefined,
+      config
     );
     return r.data;
   }

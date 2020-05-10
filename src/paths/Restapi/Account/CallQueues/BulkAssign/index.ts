@@ -1,9 +1,10 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {CallQueueBulkAssignResource} from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class BulkAssign {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -21,11 +22,14 @@ class BulkAssign {
    * Http post /restapi/v1.0/account/{accountId}/call-queues/{groupId}/bulk-assign
    */
   async post(
-    callQueueBulkAssignResource: CallQueueBulkAssignResource
+    callQueueBulkAssignResource: CallQueueBulkAssignResource,
+    config?: RestRequestConfig
   ): Promise<string> {
     const r = await this.rc.post<string>(
       this.path(),
-      callQueueBulkAssignResource
+      callQueueBulkAssignResource,
+      undefined,
+      config
     );
     return r.data;
   }

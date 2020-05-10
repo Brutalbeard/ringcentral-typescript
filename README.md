@@ -18,9 +18,9 @@ Make a copy of `.env.example` and rename it to `.env`, then fill in the data app
 In your project, require the sdk, then initialize and login
 
 ```js
-const RestClient = require('ringcentral-typescript').default
+const RestCentral = require('ringcentral-typescript').default
 
-const rc = new RestClient({
+const rc = new RestCentral({
     clientId: process.env.RINGCENTRAL_CLIENT_ID,
     clientSecret: process.env.RINGCENTRAL_CLIENT_SECRET,
     server: process.env.RINGCENTRAL_SERVER_URL,
@@ -113,13 +113,20 @@ yarn test
 ### Todo
 
 - Unified client: new UnifiedClient(protocal: 'https' | 'wss')
-- no more `any` type and `{}` type
+- no more `{}` type
 - convert code generator to TS
 - compare it with C# sdk and see what are missing
 - Create a WSG version of this SDK
-- Replace axios with @ringcentral/sdk ?
-- Make it an RingCentral official project
+- Make it a RingCentral official project
 - PubNub
-    - if use @ringcentral/sdk, then no need to implement
-- Support events
-    - if use @ringcentral/sdk, then no need to implement
+- Support events:
+    - token refreshed
+- extra features as plugins or extensions
+    - rate limit handling
+    - debug mode
+    - extrensions/<extension 1>/
+        - every extension should have a readme file
+- Test WSG queryParams with array as value
+- Test WSG binary uploading / downloading
+    - update test case so that everyone tests both REST and WSG
+- WSG should have its own folder and readme file

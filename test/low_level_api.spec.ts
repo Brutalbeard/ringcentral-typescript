@@ -2,7 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import RestClient from '../src/index';
+import RingCentral from '../src/index';
 import Utils from '../src/Utils';
 import {FaxResponse, GetMessageInfoResponse} from '../src/definitions';
 
@@ -10,7 +10,7 @@ jest.setTimeout(64000);
 
 describe('low level API', () => {
   test('sms', async () => {
-    const rc = new RestClient({
+    const rc = new RingCentral({
       clientId: process.env.RINGCENTRAL_CLIENT_ID!,
       clientSecret: process.env.RINGCENTRAL_CLIENT_SECRET!,
       server: process.env.RINGCENTRAL_SERVER_URL!,
@@ -37,9 +37,10 @@ describe('low level API', () => {
     const messageInfo = r.data;
     expect(messageInfo).not.toBeUndefined();
     expect(messageInfo.id).not.toBeUndefined();
+    await rc.revoke();
   });
   test('fax', async () => {
-    const rc = new RestClient({
+    const rc = new RingCentral({
       clientId: process.env.RINGCENTRAL_CLIENT_ID!,
       clientSecret: process.env.RINGCENTRAL_CLIENT_SECRET!,
       server: process.env.RINGCENTRAL_SERVER_URL!,
@@ -74,5 +75,6 @@ describe('low level API', () => {
     const messageInfo = r.data;
     expect(messageInfo).not.toBeUndefined();
     expect(messageInfo.id).not.toBeUndefined();
+    await rc.revoke();
   });
 });

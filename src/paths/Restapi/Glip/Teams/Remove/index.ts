@@ -1,9 +1,10 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {GlipPostMembersIdsListBody} from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class Remove {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -21,11 +22,14 @@ class Remove {
    * Http post /restapi/v1.0/glip/teams/{chatId}/remove
    */
   async post(
-    glipPostMembersIdsListBody: GlipPostMembersIdsListBody
+    glipPostMembersIdsListBody: GlipPostMembersIdsListBody,
+    config?: RestRequestConfig
   ): Promise<string> {
     const r = await this.rc.post<string>(
       this.path(),
-      glipPostMembersIdsListBody
+      glipPostMembersIdsListBody,
+      undefined,
+      config
     );
     return r.data;
   }

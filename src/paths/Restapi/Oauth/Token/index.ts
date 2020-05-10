@@ -1,9 +1,10 @@
+import {RestRequestConfig} from '../../../../Rest';
 import {TokenInfo, GetTokenRequest} from '../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../..';
+import RingCentral from '../../../..';
 
 class Token {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -20,8 +21,16 @@ class Token {
    * Rate Limit Group: Auth
    * Http post /restapi/oauth/token
    */
-  async post(getTokenRequest: GetTokenRequest): Promise<TokenInfo> {
-    const r = await this.rc.post<TokenInfo>(this.path(), getTokenRequest);
+  async post(
+    getTokenRequest: GetTokenRequest,
+    config?: RestRequestConfig
+  ): Promise<TokenInfo> {
+    const r = await this.rc.post<TokenInfo>(
+      this.path(),
+      getTokenRequest,
+      undefined,
+      config
+    );
     return r.data;
   }
 }

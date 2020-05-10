@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   CreateMultipleWirelessPointsResponse,
   CreateMultipleWirelessPointsRequest,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class WirelessPointsBulkCreate {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,14 @@ class WirelessPointsBulkCreate {
    * Http post /restapi/v1.0/account/{accountId}/emergency-address-auto-update/wireless-points-bulk-create
    */
   async post(
-    createMultipleWirelessPointsRequest: CreateMultipleWirelessPointsRequest
+    createMultipleWirelessPointsRequest: CreateMultipleWirelessPointsRequest,
+    config?: RestRequestConfig
   ): Promise<CreateMultipleWirelessPointsResponse> {
     const r = await this.rc.post<CreateMultipleWirelessPointsResponse>(
       this.path(),
-      createMultipleWirelessPointsRequest
+      createMultipleWirelessPointsRequest,
+      undefined,
+      config
     );
     return r.data;
   }

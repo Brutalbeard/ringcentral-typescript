@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   ValidateMultipleSwitchesResponse,
   ValidateMultipleSwitchesRequest,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class SwitchesBulkValidate {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,14 @@ class SwitchesBulkValidate {
    * Http post /restapi/v1.0/account/{accountId}/emergency-address-auto-update/switches-bulk-validate
    */
   async post(
-    validateMultipleSwitchesRequest: ValidateMultipleSwitchesRequest
+    validateMultipleSwitchesRequest: ValidateMultipleSwitchesRequest,
+    config?: RestRequestConfig
   ): Promise<ValidateMultipleSwitchesResponse> {
     const r = await this.rc.post<ValidateMultipleSwitchesResponse>(
       this.path(),
-      validateMultipleSwitchesRequest
+      validateMultipleSwitchesRequest,
+      undefined,
+      config
     );
     return r.data;
   }

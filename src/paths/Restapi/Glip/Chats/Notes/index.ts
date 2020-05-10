@@ -1,3 +1,4 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   GlipNoteInfo,
   GlipNoteCreate,
@@ -5,10 +6,10 @@ import {
   ListChatNotesParameters,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class Notes {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -25,8 +26,16 @@ class Notes {
    * Rate Limit Group: Medium
    * Http post /restapi/v1.0/glip/chats/{chatId}/notes
    */
-  async post(glipNoteCreate: GlipNoteCreate): Promise<GlipNoteInfo> {
-    const r = await this.rc.post<GlipNoteInfo>(this.path(), glipNoteCreate);
+  async post(
+    glipNoteCreate: GlipNoteCreate,
+    config?: RestRequestConfig
+  ): Promise<GlipNoteInfo> {
+    const r = await this.rc.post<GlipNoteInfo>(
+      this.path(),
+      glipNoteCreate,
+      undefined,
+      config
+    );
     return r.data;
   }
 
@@ -35,8 +44,15 @@ class Notes {
    * Rate Limit Group: Heavy
    * Http get /restapi/v1.0/glip/chats/{chatId}/notes
    */
-  async get(queryParams?: ListChatNotesParameters): Promise<GlipNotesInfo> {
-    const r = await this.rc.get<GlipNotesInfo>(this.path(), queryParams);
+  async get(
+    queryParams?: ListChatNotesParameters,
+    config?: RestRequestConfig
+  ): Promise<GlipNotesInfo> {
+    const r = await this.rc.get<GlipNotesInfo>(
+      this.path(),
+      queryParams,
+      config
+    );
     return r.data;
   }
 }

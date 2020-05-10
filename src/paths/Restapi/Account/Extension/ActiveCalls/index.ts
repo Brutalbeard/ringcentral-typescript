@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   UserActiveCallsResponse,
   ListExtensionActiveCallsParameters,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class ActiveCalls {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,13 @@ class ActiveCalls {
    * Http get /restapi/v1.0/account/{accountId}/extension/{extensionId}/active-calls
    */
   async get(
-    queryParams?: ListExtensionActiveCallsParameters
+    queryParams?: ListExtensionActiveCallsParameters,
+    config?: RestRequestConfig
   ): Promise<UserActiveCallsResponse> {
     const r = await this.rc.get<UserActiveCallsResponse>(
       this.path(),
-      queryParams
+      queryParams,
+      config
     );
     return r.data;
   }

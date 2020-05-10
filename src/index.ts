@@ -1,78 +1,44 @@
-import axios, {
-  AxiosInstance,
-  Method,
-  AxiosRequestConfig,
-  AxiosResponse,
-} from 'axios';
-import qs from 'qs';
-import delay from 'delay';
+import {Method, AxiosResponse} from 'axios';
 
 import {GetTokenRequest, TokenInfo} from './definitions';
-import RestException from './RestException';
 import Restapi from './paths/Restapi';
 import Scim from './paths/Scim';
-import {version} from '../package.json';
-import Utils from './Utils';
+import Rest, {RestOptions, RestRequestConfig} from './Rest';
+import Wsg, {WsgOptions} from './Wsg';
 
-interface ConstructorOptions {
-  clientId: string;
-  clientSecret: string;
-  server: string;
-  appName?: string;
-  appVersion?: string;
-  httpClient?: AxiosInstance;
-  token?: TokenInfo;
-  handleRateLimit?: boolean | number;
-  debugMode?: boolean;
-}
-
-interface PasswordFlowOptions {
+type PasswordFlowOptions = {
   username: string;
   extension?: string;
   password: string;
-}
-interface AuthCodeFlowOptions {
+};
+type AuthCodeFlowOptions = {
   code: string;
   redirect_uri: string;
-}
+};
+type RingCentralDefaults = {
+  transport: 'https' | 'wss';
+};
 
-class RestClient {
-  static sandboxServer = 'https://platform.devtest.ringcentral.com';
-  static productionServer = 'https://platform.ringcentral.com';
+export default class RingCentral {
+  rest: Rest;
+  wsg?: Wsg;
 
-  clientId: string;
-  clientSecret: string;
-  server: string;
-  appName: string;
-  appVersion: string;
-  httpClient: AxiosInstance;
-  token?: TokenInfo;
-  handleRateLimit?: boolean | number;
-  debugMode?: boolean;
+  defaults: RingCentralDefaults = {
+    transport: 'https',
+  };
 
-  constructor(options: ConstructorOptions) {
-    this.clientId = options.clientId;
-    this.clientSecret = options.clientSecret;
-    this.server = options.server;
-    this.appName = options.appName ?? 'Unknown';
-    this.appVersion = options.appVersion ?? '0.0.1';
-    this.httpClient =
-      options.httpClient ??
-      axios.create({
-        baseURL: this.server,
-        headers: {
-          'X-User-Agent': `${this.appName}/${this.appVersion} tylerlong/ringcentral-typescript/${version}`,
-        },
-        validateStatus: () => {
-          return true;
-        },
-        paramsSerializer: params => {
-          return qs.stringify(params, {indices: false});
-        },
-      });
-    this.token = options.token;
-    this.handleRateLimit = options.handleRateLimit ?? false;
-    this.debugMode = options.debugMode ?? false;
+  constructor(restOptions: RestOptions, wsgOptions?: WsgOptions) {
+    this.rest = new Rest(restOptions);
+    if (wsgOptions) {
+      this.wsg = new Wsg(this, wsgOptions);
+    }
+  }
+
+  get token() {
+    return this.rest.token;
+  }
+  set token(token) {
+    this.rest.token = token;
   }
 
   async request<T>(
@@ -80,69 +46,38 @@ class RestClient {
     endpoint: string,
     content?: {},
     queryParams?: {},
-    config?: {}
+    config?: RestRequestConfig
   ): Promise<AxiosResponse<T>> {
-    const _config: AxiosRequestConfig = {
-      method: httpMethod,
-      url: endpoint,
-      data: content,
-      params: queryParams,
-      ...config,
-    };
-    if (endpoint.startsWith('/restapi/oauth/')) {
-      // basic token
-      _config.auth = {
-        username: this.clientId,
-        password: this.clientSecret,
-      };
-      _config.data = qs.stringify(_config.data);
-    } else {
-      // bearer token
-      _config.headers = {
-        ..._config.headers,
-        Authorization: `Bearer ${this.token?.access_token}`,
-      };
-    }
-    const r = await this.httpClient.request<T>(_config);
-
-    if (this.debugMode === true) {
-      console.debug(Utils.formatTraffic(r));
-    }
-
-    if (r.status >= 200 && r.status < 300) {
-      return r;
-    } else if (r.status === 429 && this.handleRateLimit) {
-      let delayTime = r.headers['x-rate-limit-window'] ?? 60;
-      if (typeof this.handleRateLimit === 'number') {
-        delayTime = this.handleRateLimit;
+    const transport = config?.transport ?? this.defaults.transport;
+    let engine: Rest | Wsg = this.rest;
+    if (transport === 'wss') {
+      if (!this.wsg) {
+        throw new Error(
+          'In order to use wss as transport, you need to specify wsgOptions when initializing RingCentral.'
+        );
       }
-      // unsure on level? or if this should be a thrown error?
-      console.debug(
-        `Hit RingCentral Rate Limit. Pausing requests for ${delayTime} seconds.`
-      );
-      await delay(delayTime * 1000);
-      return this.request<T>(
-        httpMethod,
-        endpoint,
-        content,
-        queryParams,
-        config
-      );
-    } else {
-      throw new RestException(r);
+      engine = this.wsg!;
     }
+    return engine.request<T>(
+      httpMethod,
+      endpoint,
+      content,
+      queryParams,
+      config
+    );
   }
+
   async get<T>(
     endpoint: string,
     queryParams?: {},
-    config?: {}
+    config?: RestRequestConfig
   ): Promise<AxiosResponse<T>> {
     return this.request<T>('GET', endpoint, undefined, queryParams, config);
   }
   async delete<T>(
     endpoint: string,
     queryParams?: {},
-    config?: {}
+    config?: RestRequestConfig
   ): Promise<AxiosResponse<T>> {
     return this.request<T>('DELETE', endpoint, undefined, queryParams, config);
   }
@@ -150,7 +85,7 @@ class RestClient {
     endpoint: string,
     content?: {},
     queryParams?: {},
-    config?: {}
+    config?: RestRequestConfig
   ): Promise<AxiosResponse<T>> {
     return this.request<T>('POST', endpoint, content, queryParams, config);
   }
@@ -158,7 +93,7 @@ class RestClient {
     endpoint: string,
     content: {},
     queryParams?: {},
-    config?: {}
+    config?: RestRequestConfig
   ): Promise<AxiosResponse<T>> {
     return this.request<T>('PUT', endpoint, content, queryParams, config);
   }
@@ -166,7 +101,7 @@ class RestClient {
     endpoint: string,
     content: {},
     queryParams?: {},
-    config?: {}
+    config?: RestRequestConfig
   ): Promise<AxiosResponse<T>> {
     return this.request<T>('PATCH', endpoint, content, queryParams, config);
   }
@@ -240,6 +175,7 @@ class RestClient {
    * @param tokenToRevoke AccessToken
    */
   async revoke(tokenToRevoke?: string) {
+    this.wsg?.revoke();
     if (!tokenToRevoke && !this.token) {
       // nothing to revoke
       return;
@@ -270,5 +206,3 @@ class RestClient {
     return new Scim(this, version);
   }
 }
-
-export default RestClient;

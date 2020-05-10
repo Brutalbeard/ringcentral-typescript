@@ -1,9 +1,10 @@
+import {RestRequestConfig} from '../../../../Rest';
 import {GetServiceInfoResponse} from '../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../..';
+import RingCentral from '../../../..';
 
 class ServiceInfo {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -20,8 +21,12 @@ class ServiceInfo {
    * Rate Limit Group: Light
    * Http get /restapi/v1.0/account/{accountId}/service-info
    */
-  async get(): Promise<GetServiceInfoResponse> {
-    const r = await this.rc.get<GetServiceInfoResponse>(this.path());
+  async get(config?: RestRequestConfig): Promise<GetServiceInfoResponse> {
+    const r = await this.rc.get<GetServiceInfoResponse>(
+      this.path(),
+      undefined,
+      config
+    );
     return r.data;
   }
 }

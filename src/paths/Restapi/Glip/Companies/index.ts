@@ -1,9 +1,10 @@
+import {RestRequestConfig} from '../../../../Rest';
 import {GlipCompany} from '../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../..';
+import RingCentral from '../../../..';
 
 class Companies {
-  rc: RestClient;
+  rc: RingCentral;
   companyId: string | null;
   parent: Parent;
 
@@ -26,12 +27,12 @@ class Companies {
    * Rate Limit Group: Light
    * Http get /restapi/v1.0/glip/companies/{companyId}
    */
-  async get(): Promise<GlipCompany> {
+  async get(config?: RestRequestConfig): Promise<GlipCompany> {
     if (this.companyId === null) {
       throw new Error('companyId must be specified.');
     }
 
-    const r = await this.rc.get<GlipCompany>(this.path());
+    const r = await this.rc.get<GlipCompany>(this.path(), undefined, config);
     return r.data;
   }
 }

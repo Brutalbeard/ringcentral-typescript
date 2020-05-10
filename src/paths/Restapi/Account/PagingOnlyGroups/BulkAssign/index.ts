@@ -1,9 +1,10 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {EditPagingGroupRequest} from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class BulkAssign {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -20,8 +21,16 @@ class BulkAssign {
    * Rate Limit Group: Heavy
    * Http post /restapi/v1.0/account/{accountId}/paging-only-groups/{pagingOnlyGroupId}/bulk-assign
    */
-  async post(editPagingGroupRequest: EditPagingGroupRequest): Promise<string> {
-    const r = await this.rc.post<string>(this.path(), editPagingGroupRequest);
+  async post(
+    editPagingGroupRequest: EditPagingGroupRequest,
+    config?: RestRequestConfig
+  ): Promise<string> {
+    const r = await this.rc.post<string>(
+      this.path(),
+      editPagingGroupRequest,
+      undefined,
+      config
+    );
     return r.data;
   }
 }

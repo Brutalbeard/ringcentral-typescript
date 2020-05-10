@@ -1,9 +1,10 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {GlipPostMembersListBody} from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class Add {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -21,9 +22,15 @@ class Add {
    * Http post /restapi/v1.0/glip/teams/{chatId}/add
    */
   async post(
-    glipPostMembersListBody: GlipPostMembersListBody
+    glipPostMembersListBody: GlipPostMembersListBody,
+    config?: RestRequestConfig
   ): Promise<string> {
-    const r = await this.rc.post<string>(this.path(), glipPostMembersListBody);
+    const r = await this.rc.post<string>(
+      this.path(),
+      glipPostMembersListBody,
+      undefined,
+      config
+    );
     return r.data;
   }
 }

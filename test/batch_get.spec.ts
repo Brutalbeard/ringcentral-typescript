@@ -1,19 +1,14 @@
 /* eslint-env jest */
-import RestClient from '../src/index';
+import RingCentral from '../src/index';
 
 jest.setTimeout(64000);
 
 describe('batch get', () => {
   test("get extension's presence info", async () => {
-    const rc = new RestClient({
+    const rc = new RingCentral({
       clientId: process.env.RINGCENTRAL_CLIENT_ID!,
       clientSecret: process.env.RINGCENTRAL_CLIENT_SECRET!,
       server: process.env.RINGCENTRAL_SERVER_URL!,
-    });
-    await rc.login({
-      username: process.env.RINGCENTRAL_USERNAME!,
-      extension: process.env.RINGCENTRAL_EXTENSION!,
-      password: process.env.RINGCENTRAL_PASSWORD!,
     });
     await rc.login({
       username: process.env.RINGCENTRAL_USERNAME!,
@@ -32,5 +27,6 @@ describe('batch get', () => {
     expect(r).not.toBeNull();
     expect(r.data).not.toBeNull();
     expect(r.data).toContain('--Boundary');
+    await rc.revoke();
   });
 });

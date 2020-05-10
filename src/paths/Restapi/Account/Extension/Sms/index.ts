@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   GetMessageInfoResponse,
   CreateSMSMessage,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class Sms {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,14 @@ class Sms {
    * Http post /restapi/v1.0/account/{accountId}/extension/{extensionId}/sms
    */
   async post(
-    createSMSMessage: CreateSMSMessage
+    createSMSMessage: CreateSMSMessage,
+    config?: RestRequestConfig
   ): Promise<GetMessageInfoResponse> {
     const r = await this.rc.post<GetMessageInfoResponse>(
       this.path(),
-      createSMSMessage
+      createSMSMessage,
+      undefined,
+      config
     );
     return r.data;
   }

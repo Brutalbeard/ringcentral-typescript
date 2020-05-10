@@ -1,12 +1,12 @@
 /* eslint-env jest */
-import RestClient from '../src/index';
+import RingCentral from '../src/index';
 import RestException from '../src/RestException';
 
 jest.setTimeout(64000);
 
 describe('Exceptions', () => {
   test('400', async () => {
-    const rc = new RestClient({
+    const rc = new RingCentral({
       clientId: process.env.RINGCENTRAL_CLIENT_ID!,
       clientSecret: process.env.RINGCENTRAL_CLIENT_SECRET!,
       server: process.env.RINGCENTRAL_SERVER_URL!,
@@ -32,10 +32,11 @@ describe('Exceptions', () => {
     } finally {
       expect(exception).toBeTruthy();
     }
+    await rc.revoke();
   });
 
   test('404', async () => {
-    const rc = new RestClient({
+    const rc = new RingCentral({
       clientId: process.env.RINGCENTRAL_CLIENT_ID!,
       clientSecret: process.env.RINGCENTRAL_CLIENT_SECRET!,
       server: process.env.RINGCENTRAL_SERVER_URL!,
@@ -58,5 +59,6 @@ describe('Exceptions', () => {
     } finally {
       expect(exception).toBeTruthy();
     }
+    await rc.revoke();
   });
 });

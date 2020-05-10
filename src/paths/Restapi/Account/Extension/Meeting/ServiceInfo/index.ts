@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../../Rest';
 import {
   MeetingServiceInfoResource,
   MeetingServiceInfoRequest,
 } from '../../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../../..';
+import RingCentral from '../../../../../..';
 
 class ServiceInfo {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -23,8 +24,12 @@ class ServiceInfo {
    * Rate Limit Group: Light
    * Http get /restapi/v1.0/account/{accountId}/extension/{extensionId}/meeting/service-info
    */
-  async get(): Promise<MeetingServiceInfoResource> {
-    const r = await this.rc.get<MeetingServiceInfoResource>(this.path());
+  async get(config?: RestRequestConfig): Promise<MeetingServiceInfoResource> {
+    const r = await this.rc.get<MeetingServiceInfoResource>(
+      this.path(),
+      undefined,
+      config
+    );
     return r.data;
   }
 
@@ -34,11 +39,14 @@ class ServiceInfo {
    * Http patch /restapi/v1.0/account/{accountId}/extension/{extensionId}/meeting/service-info
    */
   async patch(
-    meetingServiceInfoRequest: MeetingServiceInfoRequest
+    meetingServiceInfoRequest: MeetingServiceInfoRequest,
+    config?: RestRequestConfig
   ): Promise<MeetingServiceInfoResource> {
     const r = await this.rc.patch<MeetingServiceInfoResource>(
       this.path(),
-      meetingServiceInfoRequest
+      meetingServiceInfoRequest,
+      undefined,
+      config
     );
     return r.data;
   }

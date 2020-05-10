@@ -6,14 +6,15 @@ import Dictionary from './Dictionary';
 import Account from './Account';
 import Status from './Status';
 import Oauth from './Oauth';
+import {RestRequestConfig} from '../../Rest';
 import {GetVersionsResponse, GetVersionResponse} from '../../definitions';
-import RestClient from '../..';
+import RingCentral from '../..';
 
 class Restapi {
-  rc: RestClient;
+  rc: RingCentral;
   apiVersion: string | null;
 
-  constructor(rc: RestClient, apiVersion: string | null = 'v1.0') {
+  constructor(rc: RingCentral, apiVersion: string | null = 'v1.0') {
     this.rc = rc;
     this.apiVersion = apiVersion;
   }
@@ -31,8 +32,12 @@ class Restapi {
    * Rate Limit Group: NoThrottling
    * Http get /restapi
    */
-  async list(): Promise<GetVersionsResponse> {
-    const r = await this.rc.get<GetVersionsResponse>(this.path(false));
+  async list(config?: RestRequestConfig): Promise<GetVersionsResponse> {
+    const r = await this.rc.get<GetVersionsResponse>(
+      this.path(false),
+      undefined,
+      config
+    );
     return r.data;
   }
 
@@ -41,12 +46,16 @@ class Restapi {
    * Rate Limit Group: NoThrottling
    * Http get /restapi/{apiVersion}
    */
-  async get(): Promise<GetVersionResponse> {
+  async get(config?: RestRequestConfig): Promise<GetVersionResponse> {
     if (this.apiVersion === null) {
       throw new Error('apiVersion must be specified.');
     }
 
-    const r = await this.rc.get<GetVersionResponse>(this.path());
+    const r = await this.rc.get<GetVersionResponse>(
+      this.path(),
+      undefined,
+      config
+    );
     return r.data;
   }
 

@@ -1,13 +1,14 @@
+import {RestRequestConfig} from '../../../../Rest';
 import {
   ParsePhoneNumberResponse,
   ParsePhoneNumberRequest,
   ParsePhoneNumberParameters,
 } from '../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../..';
+import RingCentral from '../../../..';
 
 class Parse {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -26,12 +27,14 @@ class Parse {
    */
   async post(
     parsePhoneNumberRequest: ParsePhoneNumberRequest,
-    queryParams?: ParsePhoneNumberParameters
+    queryParams?: ParsePhoneNumberParameters,
+    config?: RestRequestConfig
   ): Promise<ParsePhoneNumberResponse> {
     const r = await this.rc.post<ParsePhoneNumberResponse>(
       this.path(),
       parsePhoneNumberRequest,
-      queryParams
+      queryParams,
+      config
     );
     return r.data;
   }

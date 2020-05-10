@@ -1,13 +1,14 @@
+import {RestRequestConfig} from '../../../../../../../Rest';
 import {
   CallRecording,
   CallRecordingUpdate,
   PauseResumeCallRecordingParameters,
 } from '../../../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../../../..';
+import RingCentral from '../../../../../../..';
 
 class Recordings {
-  rc: RestClient;
+  rc: RingCentral;
   recordingId: string | null;
   parent: Parent;
 
@@ -30,8 +31,8 @@ class Recordings {
    * Rate Limit Group: Light
    * Http post /restapi/v1.0/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/recordings
    */
-  async post(): Promise<string> {
-    const r = await this.rc.post<string>(this.path(false));
+  async post(config?: RestRequestConfig): Promise<string> {
+    const r = await this.rc.post<string>(this.path(false), undefined, config);
     return r.data;
   }
 
@@ -42,7 +43,8 @@ class Recordings {
    */
   async patch(
     callRecordingUpdate: CallRecordingUpdate,
-    queryParams?: PauseResumeCallRecordingParameters
+    queryParams?: PauseResumeCallRecordingParameters,
+    config?: RestRequestConfig
   ): Promise<CallRecording> {
     if (this.recordingId === null) {
       throw new Error('recordingId must be specified.');
@@ -51,7 +53,8 @@ class Recordings {
     const r = await this.rc.patch<CallRecording>(
       this.path(),
       callRecordingUpdate,
-      queryParams
+      queryParams,
+      config
     );
     return r.data;
   }

@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../Rest';
 import {
   GetLocationListResponse,
   ListLocationsParameters,
 } from '../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../..';
+import RingCentral from '../../../..';
 
 class Location {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,13 @@ class Location {
    * Http get /restapi/v1.0/dictionary/location
    */
   async get(
-    queryParams?: ListLocationsParameters
+    queryParams?: ListLocationsParameters,
+    config?: RestRequestConfig
   ): Promise<GetLocationListResponse> {
     const r = await this.rc.get<GetLocationListResponse>(
       this.path(),
-      queryParams
+      queryParams,
+      config
     );
     return r.data;
   }

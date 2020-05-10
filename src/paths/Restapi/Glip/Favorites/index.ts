@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../Rest';
 import {
   GlipChatsListWithoutNavigation,
   ListFavoriteChatsParameters,
 } from '../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../..';
+import RingCentral from '../../../..';
 
 class Favorites {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,13 @@ class Favorites {
    * Http get /restapi/v1.0/glip/favorites
    */
   async get(
-    queryParams?: ListFavoriteChatsParameters
+    queryParams?: ListFavoriteChatsParameters,
+    config?: RestRequestConfig
   ): Promise<GlipChatsListWithoutNavigation> {
     const r = await this.rc.get<GlipChatsListWithoutNavigation>(
       this.path(),
-      queryParams
+      queryParams,
+      config
     );
     return r.data;
   }

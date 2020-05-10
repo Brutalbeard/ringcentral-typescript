@@ -1,8 +1,9 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class Suspend {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -19,8 +20,8 @@ class Suspend {
    * Rate Limit Group: Medium
    * Http post /restapi/v1.0/glip/webhooks/{webhookId}/suspend
    */
-  async post(): Promise<string> {
-    const r = await this.rc.post<string>(this.path());
+  async post(config?: RestRequestConfig): Promise<string> {
+    const r = await this.rc.post<string>(this.path(), undefined, config);
     return r.data;
   }
 }

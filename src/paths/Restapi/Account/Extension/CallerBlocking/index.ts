@@ -1,13 +1,14 @@
 import PhoneNumbers from './PhoneNumbers';
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   CallerBlockingSettings,
   CallerBlockingSettingsUpdate,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class CallerBlocking {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,8 +25,12 @@ class CallerBlocking {
    * Rate Limit Group: Light
    * Http get /restapi/v1.0/account/{accountId}/extension/{extensionId}/caller-blocking
    */
-  async get(): Promise<CallerBlockingSettings> {
-    const r = await this.rc.get<CallerBlockingSettings>(this.path());
+  async get(config?: RestRequestConfig): Promise<CallerBlockingSettings> {
+    const r = await this.rc.get<CallerBlockingSettings>(
+      this.path(),
+      undefined,
+      config
+    );
     return r.data;
   }
 
@@ -35,11 +40,14 @@ class CallerBlocking {
    * Http put /restapi/v1.0/account/{accountId}/extension/{extensionId}/caller-blocking
    */
   async put(
-    callerBlockingSettingsUpdate: CallerBlockingSettingsUpdate
+    callerBlockingSettingsUpdate: CallerBlockingSettingsUpdate,
+    config?: RestRequestConfig
   ): Promise<CallerBlockingSettings> {
     const r = await this.rc.put<CallerBlockingSettings>(
       this.path(),
-      callerBlockingSettingsUpdate
+      callerBlockingSettingsUpdate,
+      undefined,
+      config
     );
     return r.data;
   }

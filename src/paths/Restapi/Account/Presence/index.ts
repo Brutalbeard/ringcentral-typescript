@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../Rest';
 import {
   AccountPresenceInfo,
   ReadAccountPresenceParameters,
 } from '../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../..';
+import RingCentral from '../../../..';
 
 class Presence {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,9 +25,14 @@ class Presence {
    * Http get /restapi/v1.0/account/{accountId}/presence
    */
   async get(
-    queryParams?: ReadAccountPresenceParameters
+    queryParams?: ReadAccountPresenceParameters,
+    config?: RestRequestConfig
   ): Promise<AccountPresenceInfo> {
-    const r = await this.rc.get<AccountPresenceInfo>(this.path(), queryParams);
+    const r = await this.rc.get<AccountPresenceInfo>(
+      this.path(),
+      queryParams,
+      config
+    );
     return r.data;
   }
 }

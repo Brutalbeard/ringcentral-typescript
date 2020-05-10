@@ -1,9 +1,10 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {GlipCompleteTask} from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class Complete {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -20,8 +21,16 @@ class Complete {
    * Rate Limit Group: Medium
    * Http post /restapi/v1.0/glip/tasks/{taskId}/complete
    */
-  async post(glipCompleteTask: GlipCompleteTask): Promise<string> {
-    const r = await this.rc.post<string>(this.path(), glipCompleteTask);
+  async post(
+    glipCompleteTask: GlipCompleteTask,
+    config?: RestRequestConfig
+  ): Promise<string> {
+    const r = await this.rc.post<string>(
+      this.path(),
+      glipCompleteTask,
+      undefined,
+      config
+    );
     return r.data;
   }
 }

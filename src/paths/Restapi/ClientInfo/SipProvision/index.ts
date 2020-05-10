@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../Rest';
 import {
   CreateSipRegistrationResponse,
   CreateSipRegistrationRequest,
 } from '../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../..';
+import RingCentral from '../../../..';
 
 class SipProvision {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,14 @@ class SipProvision {
    * Http post /restapi/v1.0/client-info/sip-provision
    */
   async post(
-    createSipRegistrationRequest: CreateSipRegistrationRequest
+    createSipRegistrationRequest: CreateSipRegistrationRequest,
+    config?: RestRequestConfig
   ): Promise<CreateSipRegistrationResponse> {
     const r = await this.rc.post<CreateSipRegistrationResponse>(
       this.path(),
-      createSipRegistrationRequest
+      createSipRegistrationRequest,
+      undefined,
+      config
     );
     return r.data;
   }

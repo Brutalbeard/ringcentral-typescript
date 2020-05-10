@@ -1,11 +1,11 @@
 /* eslint-env jest */
-import RestClient from '../src/index';
+import RingCentral from '../src/index';
 
 jest.setTimeout(64000);
 
 describe('message store', () => {
   test('every inbound fax should have from info', async () => {
-    const rc = new RestClient({
+    const rc = new RingCentral({
       clientId: process.env.RINGCENTRAL_CLIENT_ID!,
       clientSecret: process.env.RINGCENTRAL_CLIENT_SECRET!,
       server: process.env.RINGCENTRAL_SERVER_URL!,
@@ -36,5 +36,6 @@ describe('message store', () => {
       .messageStore(messageList.records?.[0].id?.toString())
       .get();
     expect(messageInfo.from).toBeDefined();
+    await rc.revoke();
   });
 });

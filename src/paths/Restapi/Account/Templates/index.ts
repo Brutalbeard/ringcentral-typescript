@@ -1,13 +1,14 @@
+import {RestRequestConfig} from '../../../../Rest';
 import {
   UserTemplates,
   ListUserTemplatesParameters,
   TemplateInfo,
 } from '../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../..';
+import RingCentral from '../../../..';
 
 class Templates {
-  rc: RestClient;
+  rc: RingCentral;
   templateId: string | null;
   parent: Parent;
 
@@ -31,9 +32,14 @@ class Templates {
    * Http get /restapi/v1.0/account/{accountId}/templates
    */
   async list(
-    queryParams?: ListUserTemplatesParameters
+    queryParams?: ListUserTemplatesParameters,
+    config?: RestRequestConfig
   ): Promise<UserTemplates> {
-    const r = await this.rc.get<UserTemplates>(this.path(false), queryParams);
+    const r = await this.rc.get<UserTemplates>(
+      this.path(false),
+      queryParams,
+      config
+    );
     return r.data;
   }
 
@@ -42,12 +48,12 @@ class Templates {
    * Rate Limit Group: Light
    * Http get /restapi/v1.0/account/{accountId}/templates/{templateId}
    */
-  async get(): Promise<TemplateInfo> {
+  async get(config?: RestRequestConfig): Promise<TemplateInfo> {
     if (this.templateId === null) {
       throw new Error('templateId must be specified.');
     }
 
-    const r = await this.rc.get<TemplateInfo>(this.path());
+    const r = await this.rc.get<TemplateInfo>(this.path(), undefined, config);
     return r.data;
   }
 }

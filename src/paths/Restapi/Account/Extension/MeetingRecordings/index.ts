@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   ListMeetingRecordingsResponse,
   ListUserMeetingRecordingsParameters,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class MeetingRecordings {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,13 @@ class MeetingRecordings {
    * Http get /restapi/v1.0/account/{accountId}/extension/{extensionId}/meeting-recordings
    */
   async get(
-    queryParams?: ListUserMeetingRecordingsParameters
+    queryParams?: ListUserMeetingRecordingsParameters,
+    config?: RestRequestConfig
   ): Promise<ListMeetingRecordingsResponse> {
     const r = await this.rc.get<ListMeetingRecordingsResponse>(
       this.path(),
-      queryParams
+      queryParams,
+      config
     );
     return r.data;
   }

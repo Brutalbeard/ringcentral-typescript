@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   CallRecordingCustomGreetings,
   ListCallRecordingCustomGreetingsParameters,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class CustomGreetings {
-  rc: RestClient;
+  rc: RingCentral;
   greetingId: string | null;
   parent: Parent;
 
@@ -30,11 +31,13 @@ class CustomGreetings {
    * Http get /restapi/v1.0/account/{accountId}/call-recording/custom-greetings
    */
   async get(
-    queryParams?: ListCallRecordingCustomGreetingsParameters
+    queryParams?: ListCallRecordingCustomGreetingsParameters,
+    config?: RestRequestConfig
   ): Promise<CallRecordingCustomGreetings> {
     const r = await this.rc.get<CallRecordingCustomGreetings>(
       this.path(false),
-      queryParams
+      queryParams,
+      config
     );
     return r.data;
   }
@@ -44,12 +47,12 @@ class CustomGreetings {
    * Rate Limit Group: Medium
    * Http delete /restapi/v1.0/account/{accountId}/call-recording/custom-greetings/{greetingId}
    */
-  async delete(): Promise<string> {
+  async delete(config?: RestRequestConfig): Promise<string> {
     if (this.greetingId === null) {
       throw new Error('greetingId must be specified.');
     }
 
-    const r = await this.rc.delete<string>(this.path());
+    const r = await this.rc.delete<string>(this.path(), undefined, config);
     return r.data;
   }
 }

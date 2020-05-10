@@ -1,9 +1,10 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {ExtensionCallerIdInfo} from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class CallerId {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -20,8 +21,12 @@ class CallerId {
    * Rate Limit Group: Light
    * Http get /restapi/v1.0/account/{accountId}/extension/{extensionId}/caller-id
    */
-  async get(): Promise<ExtensionCallerIdInfo> {
-    const r = await this.rc.get<ExtensionCallerIdInfo>(this.path());
+  async get(config?: RestRequestConfig): Promise<ExtensionCallerIdInfo> {
+    const r = await this.rc.get<ExtensionCallerIdInfo>(
+      this.path(),
+      undefined,
+      config
+    );
     return r.data;
   }
 
@@ -31,11 +36,14 @@ class CallerId {
    * Http put /restapi/v1.0/account/{accountId}/extension/{extensionId}/caller-id
    */
   async put(
-    extensionCallerIdInfo: ExtensionCallerIdInfo
+    extensionCallerIdInfo: ExtensionCallerIdInfo,
+    config?: RestRequestConfig
   ): Promise<ExtensionCallerIdInfo> {
     const r = await this.rc.put<ExtensionCallerIdInfo>(
       this.path(),
-      extensionCallerIdInfo
+      extensionCallerIdInfo,
+      undefined,
+      config
     );
     return r.data;
   }

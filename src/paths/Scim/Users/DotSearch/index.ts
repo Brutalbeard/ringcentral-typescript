@@ -1,9 +1,10 @@
+import {RestRequestConfig} from '../../../../Rest';
 import {UserSearchResponse, SearchRequest} from '../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../..';
+import RingCentral from '../../../..';
 
 class DotSearch {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -20,10 +21,15 @@ class DotSearch {
    * Rate Limit Group: Light
    * Http post /scim/v2/Users/.search
    */
-  async post(searchRequest: SearchRequest): Promise<UserSearchResponse> {
+  async post(
+    searchRequest: SearchRequest,
+    config?: RestRequestConfig
+  ): Promise<UserSearchResponse> {
     const r = await this.rc.post<UserSearchResponse>(
       this.path(),
-      searchRequest
+      searchRequest,
+      undefined,
+      config
     );
     return r.data;
   }

@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   GetExtensionPhoneNumbersResponse,
   ListExtensionPhoneNumbersParameters,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class PhoneNumber {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,13 @@ class PhoneNumber {
    * Http get /restapi/v1.0/account/{accountId}/extension/{extensionId}/phone-number
    */
   async get(
-    queryParams?: ListExtensionPhoneNumbersParameters
+    queryParams?: ListExtensionPhoneNumbersParameters,
+    config?: RestRequestConfig
   ): Promise<GetExtensionPhoneNumbersResponse> {
     const r = await this.rc.get<GetExtensionPhoneNumbersResponse>(
       this.path(),
-      queryParams
+      queryParams,
+      config
     );
     return r.data;
   }

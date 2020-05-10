@@ -1,10 +1,11 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {FaxResponse, CreateFaxMessageRequest} from '../../../../../definitions';
 import Utils from '../../../../../Utils';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class Fax {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -22,14 +23,15 @@ class Fax {
    * Http post /restapi/v1.0/account/{accountId}/extension/{extensionId}/fax
    */
   async post(
-    createFaxMessageRequest: CreateFaxMessageRequest
+    createFaxMessageRequest: CreateFaxMessageRequest,
+    config?: RestRequestConfig
   ): Promise<FaxResponse> {
     const formData = Utils.getFormData(createFaxMessageRequest);
     const r = await this.rc.post<FaxResponse>(
       this.path(),
       formData,
       undefined,
-      {headers: formData.getHeaders()}
+      {...config, headers: {...config?.headers, ...formData.getHeaders()}}
     );
     return r.data;
   }

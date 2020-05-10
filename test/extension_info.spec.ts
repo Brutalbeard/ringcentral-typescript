@@ -1,11 +1,11 @@
 /* eslint-env jest */
-import RestClient from '../src/index';
+import RingCentral from '../src/index';
 
 jest.setTimeout(64000);
 
 describe('HTTP GET', () => {
   test('get extension info', async () => {
-    const rc = new RestClient({
+    const rc = new RingCentral({
       clientId: process.env.RINGCENTRAL_CLIENT_ID!,
       clientSecret: process.env.RINGCENTRAL_CLIENT_SECRET!,
       server: process.env.RINGCENTRAL_SERVER_URL!,
@@ -18,5 +18,6 @@ describe('HTTP GET', () => {
     const extensionInfo = await rc.restapi().account().extension().get();
     expect(extensionInfo).not.toBeUndefined();
     expect(extensionInfo.id).not.toBeUndefined();
+    await rc.revoke();
   });
 });

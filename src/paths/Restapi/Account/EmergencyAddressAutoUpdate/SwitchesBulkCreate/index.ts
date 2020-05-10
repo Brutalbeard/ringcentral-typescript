@@ -1,12 +1,13 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {
   CreateMultipleSwitchesResponse,
   CreateMultipleSwitchesRequest,
 } from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class SwitchesBulkCreate {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -24,11 +25,14 @@ class SwitchesBulkCreate {
    * Http post /restapi/v1.0/account/{accountId}/emergency-address-auto-update/switches-bulk-create
    */
   async post(
-    createMultipleSwitchesRequest: CreateMultipleSwitchesRequest
+    createMultipleSwitchesRequest: CreateMultipleSwitchesRequest,
+    config?: RestRequestConfig
   ): Promise<CreateMultipleSwitchesResponse> {
     const r = await this.rc.post<CreateMultipleSwitchesResponse>(
       this.path(),
-      createMultipleSwitchesRequest
+      createMultipleSwitchesRequest,
+      undefined,
+      config
     );
     return r.data;
   }

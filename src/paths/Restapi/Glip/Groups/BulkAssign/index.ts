@@ -1,9 +1,10 @@
+import {RestRequestConfig} from '../../../../../Rest';
 import {GlipGroupInfo, EditGroupRequest} from '../../../../../definitions';
 import Parent from '..';
-import RestClient from '../../../../..';
+import RingCentral from '../../../../..';
 
 class BulkAssign {
-  rc: RestClient;
+  rc: RingCentral;
   parent: Parent;
 
   constructor(parent: Parent) {
@@ -20,8 +21,16 @@ class BulkAssign {
    * Rate Limit Group: Medium
    * Http post /restapi/v1.0/glip/groups/{groupId}/bulk-assign
    */
-  async post(editGroupRequest: EditGroupRequest): Promise<GlipGroupInfo> {
-    const r = await this.rc.post<GlipGroupInfo>(this.path(), editGroupRequest);
+  async post(
+    editGroupRequest: EditGroupRequest,
+    config?: RestRequestConfig
+  ): Promise<GlipGroupInfo> {
+    const r = await this.rc.post<GlipGroupInfo>(
+      this.path(),
+      editGroupRequest,
+      undefined,
+      config
+    );
     return r.data;
   }
 }
